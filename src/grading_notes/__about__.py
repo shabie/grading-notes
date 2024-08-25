@@ -1,8 +1,0 @@
-__title__ = 'Grading Notes'
-__description__ = 'Guide LLM to judge an answer better using grading notes.'
-__url__ = 'https://github.com/shabie/grading-notes'
-__version__ = '0.1.0'
-__author__ = 'Shabie Iqbal'
-__author_email__ = 'shabieiqbal@email.com'
-__license__ = 'MIT'
-__copyright__ = 'Copyright 2024 Shabie Iqbal'

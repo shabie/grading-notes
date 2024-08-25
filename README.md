@@ -6,8 +6,6 @@
 
 Grading Notes is a Python package that leverages Large Language Models (LLMs) as automated judges for evaluating AI-generated answers against human-written grading criteria. The repo is based on the awesome post by [Databricks](https://www.databricks.com/blog/enhancing-llm-as-a-judge-with-grading-notes). The idea is to guide LLMs wtih simple grading notes rather than provide full ground truth answers thereby lowering the cost of creating ground truth data.
 
-Inspired by the awesome post by [Databricks](https://www.databricks.com/blog/enhancing-llm-as-a-judge-with-grading-notes)
-
 ## Key Features
 
 - **LLM-powered Evaluation**: Harness the intelligence of LLMs guided by humans to evaluate AI-generated answers.

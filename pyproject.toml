@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "grading-notes"
+dynamic = ["version"]
+description = 'Guide LLM to judge an answer better using grading notes.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "Apache-2.0"
+keywords = []
+authors = [
+  { name = "Shabie Iqbal", email = "shabieiqbal@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "python-dotenv",
+  "anthropic",
+  "instructor",
+  "openai",
+  "langchain",
+  "langchain-community",
+  "langchain-anthropic",
+]
+
+[project.urls]
+Documentation = "https://github.com/shabie/grading-notes#readme"
+Issues = "https://github.com/shabie/grading-notes/issues"
+Source = "https://github.com/shabie/grading-notes"
+
+[tool.hatch.version]
+path = "src/grading_notes/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest",
+  "ruff",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs",
+  "mkdocs-material",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build --clean --strict"
+serve = "mkdocs serve --dev-addr localhost:8000"
+
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/grading_notes tests}"
+
+[tool.coverage.run]
+source_pkgs = ["grading_notes", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/grading_notes/__about__.py",
+]
+
+[tool.coverage.paths]
+grading-notes = ["src/grading_notes", "*/grading-notes/src/grading_notes"]
+tests = ["tests", "*/grading_notes/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "README.md",
+]
+exclude = [
+  "/.github",
+  "/docs",
+]

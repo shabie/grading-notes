@@ -145,3 +145,37 @@ What is the largest planet in our solar system?,The answer should be 'Jupiter'.,
     }, "CSV results do not match expected output"
 
     print("CSV functionality test completed successfully!")
+
+    from typing import Any, Optional
+    from langchain.evaluation import StringEvaluator
+    from grading_notes import GradingNote, evaluate, get_judge
+
+
+    class GradingNotesEvaluator(StringEvaluator):
+        """Evaluate predictions using Grading Notes."""
+        def __init__(self, provider: str = "anthropic", model: str = "claude-3-5-sonnet-20240620"):
+            self.judge = get_judge(provider=provider, model=model)
+
+        def _evaluate_strings(
+            self,
+            *,
+            prediction: str,
+            reference: Optional[str] = None,
+            input: Optional[str] = None,
+            **kwargs: Any,
+            ) -> dict:
+            
+            if not input or not reference or not prediction:
+                raise ValueError("'input' (question), 'reference' (grading note) and 'prediction' (answer) are required.")
+            grading_note = GradingNote(question=input, grading_note=reference)
+            result = evaluate(judge=self.judge, grading_note=grading_note, answer=prediction)
+            return {"score": result}
+
+    # Usage example
+    evaluator = GradingNotesEvaluator()
+    result = evaluator.evaluate_strings(
+        prediction="Paris",
+        reference="Answer is 'Paris'. Accept case-insensitive variations.",
+        input="What is the capital of France?"
+    )
+    print(result) # {'score': True}

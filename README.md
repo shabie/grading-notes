@@ -102,6 +102,58 @@ results = evaluate_from_csv(judge=judge, csv_file="path/to/your/csv_file.csv")
 
 The CSV file should have columns `question`, `grading_note`, and `answer`.
 
+## Langchain integration
+
+You can integrate Grading Notes with langchain's custom string evaluator ([example](https://python.langchain.com/v0.1/docs/guides/productionization/evaluation/string/custom/)). Here's an example of how to create a custom evaluator in Langchain using Grading Notes:
+
+
+```python
+from typing import Any, Optional
+from langchain.evaluation import StringEvaluator
+from grading_notes import GradingNote, evaluate, get_judge
+
+
+class GradingNotesEvaluator(StringEvaluator):
+    """Evaluate predictions using Grading Notes."""
+    def __init__(
+            self,
+            provider: str = "anthropic",
+            model: str = "claude-3-5-sonnet-20240620",
+        ):
+        self.judge = get_judge(provider=provider, model=model)
+
+    def _evaluate_strings(
+            self,
+            *,
+            prediction: str,
+            reference: Optional[str] = None,
+            input: Optional[str] = None,
+            **kwargs: Any,
+        ) -> dict:
+
+        if not input or not reference or not prediction:
+            msg = "'input' (question), 'reference' (grading note) and \
+                'prediction' (answer being evaluated) are *all* required."
+            raise ValueError(msg)
+
+        grading_note = GradingNote(question=input, grading_note=reference)
+        result = evaluate(
+            judge=self.judge,
+            grading_note=grading_note,
+            answer=prediction,
+            )
+        return {"score": result}
+
+# Usage
+evaluator = GradingNotesEvaluator()
+result = evaluator.evaluate_strings(
+    prediction="Paris",
+    reference="Answer is 'Paris'. Accept case-insensitive variations.",
+    input="What is the capital of France?"
+)
+print(result)  # {'score': True}
+```
+
 ## Customization
 
 The repo currently supports Anthropic and OpenAI through the instructor library.
